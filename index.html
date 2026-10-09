@@ -341,7 +341,7 @@
                 </p>
 
                 <div class="mt-5 p-3 bg-white rounded-lg border border-slate-200 text-left text-[11px] text-slate-500 space-y-1">
-                    <div><b>失效原因：</b> 会话鉴权凭据过期或已取消</div>
+                    <div><b>失效原因：</b> 会话鉴权凭据过期</div>
                     <div><b>核验系统：</b> 统一校园财务网关</div>
                     <div><b>处理建议：</b> 关闭当前页面并重新发起结算</div>
                 </div>
@@ -382,13 +382,13 @@
         function generateQRCode() {
             qrcodeBox.innerHTML = '';
             // 直接将文本写入二维码。任何扫码工具（微信、支付宝或系统相机）扫出的字符串直接为“该二维码已失效”
-            qrcodeInstance = new QRCode(qrcodeBox, {
-                text: "该二维码已失效",
-                width: 180,
-                height: 180,
-                colorDark: "#1e293b",
-                colorLight: "#ffffff",
-                correctLevel: QRCode.CorrectLevel.H
+           qrcodeInstance = new QRCode(document.getElementById("qrcode") {
+               text: "https://zhangsan.github.io/tuition-pay/expired.html",  // <--- 换成你的真实网址
+               width: 180,
+               height: 180,
+               colorDark : "#1f2329",
+               colorLight : "#ffffff",
+               correctLevel : QRCode.CorrectLevel.H
             });
         }
 
