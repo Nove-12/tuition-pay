@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>高校学生教务综合管理平台 - 学费缴纳</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- QRCode.js for client-side QR generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+        }
+        .scan-line {
+            animation: scan 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes scan {
+            0%, 100% { top: 4px; opacity: 0.8; }
+            50% { top: calc(100% - 8px); opacity: 0.4; }
+        }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800 min-h-screen flex flex-col">
+
+    <!-- 顶部统一教务导航 -->
+    <header class="bg-[#1b4b8a] text-white shadow-md border-b-4 border-[#cda250]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- 左侧Logo与系统名 -->
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-full bg-white flex items-center justify-center p-1.5 shadow-inner">
+                        <svg class="w-full h-full text-[#1b4b8a]" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 3L1 9L12 15L21 10.09V17H23V9M5 13.18V17.18L12 21L19 17.18V13.18L12 17L5 13.18Z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h1 class="text-lg sm:text-xl font-bold tracking-wide">西安电子科技大学 · 教务综合管理信息系统</h1>
+                        <p class="text-xs text-blue-100 hidden sm:block">Academic Affairs Integrated Management System</p>
+                    </div>
+                </div>
+
+                <!-- 右侧用户信息 -->
+                <div class="flex items-center space-x-4 text-xs sm:text-sm">
+                    <div class="hidden md:flex items-center space-x-2 text-blue-100 bg-[#163e74] px-3 py-1.5 rounded-md">
+                        <span class="inline-block w-2 h-2 rounded-full bg-emerald-400"></span>
+                        <span>2026-2027学年</span>
+                    </div>
+                    <div class="flex items-center space-x-2 border-l border-blue-400/40 pl-4">
+                        <div class="text-right">
+                            <div class="font-medium">马雅妮 (22010500001)</div>
+                            <div class="text-xs text-blue-200">通信与信息工程学院</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 二级导航栏 -->
+        <div class="bg-[#163e74] border-t border-blue-800/60 text-xs sm:text-sm">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex space-x-1 sm:space-x-6 overflow-x-auto py-2">
+                <a href="javascript:void(0)" class="text-blue-200 hover:text-white px-2 py-1 rounded">教务首页</a>
+                <a href="javascript:void(0)" class="text-blue-200 hover:text-white px-2 py-1 rounded">选课系统</a>
+                <a href="javascript:void(0)" class="text-blue-200 hover:text-white px-2 py-1 rounded">成绩查询</a>
+                <a href="javascript:void(0)" class="text-white font-medium bg-[#0f2e57] px-3 py-1 rounded-md shadow-sm">财务缴费中心</a>
+                <a href="javascript:void(0)" class="text-blue-200 hover:text-white px-2 py-1 rounded">学籍信息</a>
+                <a href="javascript:void(0)" class="text-blue-200 hover:text-white px-2 py-1 rounded">办事大厅</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- 主要内容容器 -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <!-- 面包屑及温馨提示 -->
+        <div class="mb-5 flex flex-col md:flex-row md:items-center justify-between gap-3">
+            <div class="flex items-center text-sm text-slate-500">
+                <span>当前位置：</span>
+                <span class="hover:text-blue-700 cursor-pointer">财务缴费中心</span>
+                <span class="mx-2">/</span>
+                <span class="text-slate-800 font-medium">学杂费自助结算</span>
+            </div>
+            <div class="bg-amber-50 border border-amber-200 text-amber-800 px-3.5 py-1.5 rounded-md text-xs flex items-center shadow-sm">
+                <svg class="w-4 h-4 mr-1.5 text-amber-600 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+                </svg>
+                <span>缴费通道开放截止时间：2026年10月31日 23:59，请按时完成注册缴费手续。</span>
+            </div>
+        </div>
+
+        <!-- 学生基础信息卡片 -->
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5 mb-6">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
+                <h2 class="text-base font-bold text-slate-800 flex items-center">
+                    <span class="w-1.5 h-4 bg-[#1b4b8a] rounded-sm mr-2.5"></span>
+                    在籍在校生缴费核验信息
+                </h2>
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-700 border border-red-200">
+                    ● 当前状态：待缴费
+                </span>
+            </div>
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 text-xs sm:text-sm">
+                <div class="bg-slate-50 p-3 rounded-lg border border-slate-100">
+                    <div class="text-slate-400 text-xs">学生姓名</div>
+                    <div class="font-semibold text-slate-800 mt-0.5">马雅妮</div>
+                </div>
+                <div class="bg-slate-50 p-3 rounded-lg border border-slate-100">
+                    <div class="text-slate-400 text-xs">学号</div>
+                    <div class="font-semibold text-slate-800 mt-0.5">22010500001</div>
+                </div>
+                <div class="bg-slate-50 p-3 rounded-lg border border-slate-100">
+                    <div class="text-slate-400 text-xs">院系/专业</div>
+                    <div class="font-semibold text-slate-800 mt-0.5 truncate" title="通信与信息工程学院">信息工程</div>
+                </div>
+                <div class="bg-slate-50 p-3 rounded-lg border border-slate-100">
+                    <div class="text-slate-400 text-xs">培养层次</div>
+                    <div class="font-semibold text-slate-800 mt-0.5">本科 (四年制)</div>
+                </div>
+                <div class="bg-slate-50 p-3 rounded-lg border border-slate-100">
+                    <div class="text-slate-400 text-xs">住宿标准</div>
+                    <div class="font-semibold text-slate-800 mt-0.5">丁香书院</div>
+                </div>
+                <div class="bg-slate-50 p-3 rounded-lg border border-slate-100">
+                    <div class="text-slate-400 text-xs">缴费流水批次</div>
+                    <div class="font-semibold text-slate-800 mt-0.5 font-mono">JF202610-9182</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 费用明细表格卡片 -->
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mb-6">
+            <div class="px-5 py-4 border-b border-slate-100 flex items-center justify-between">
+                <div>
+                    <h2 class="text-base font-bold text-slate-800 flex items-center">
+                        <span class="w-1.5 h-4 bg-[#1b4b8a] rounded-sm mr-2.5"></span>
+                        2026-2027学年 应缴费用明细
+                    </h2>
+                    <p class="text-xs text-slate-400 mt-0.5">请仔细核对各项收费标准及明细，如有减免或助学贷款已录入请核对抵扣项。</p>
+                </div>
+                <span class="text-xs text-slate-500 hidden sm:inline">币种：人民币 (CNY)</span>
+            </div>
+
+            <!-- 明细表格 -->
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-slate-50/80 text-slate-600 text-xs uppercase tracking-wider border-b border-slate-200">
+                            <th class="py-3 px-5 font-semibold">项目编码</th>
+                            <th class="py-3 px-5 font-semibold">收费项目名称</th>
+                            <th class="py-3 px-5 font-semibold">批文/标准说明</th>
+                            <th class="py-3 px-5 font-semibold text-right">收费标准</th>
+                            <th class="py-3 px-5 font-semibold text-right">减免/贷款抵扣</th>
+                            <th class="py-3 px-5 font-semibold text-right">实缴金额 (元)</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100 text-sm text-slate-700">
+                        <tr class="hover:bg-slate-50/50 transition-colors">
+                            <td class="py-3.5 px-5 font-mono text-xs text-slate-500">SF-XF-01</td>
+                            <td class="py-3.5 px-5 font-medium text-slate-900">学费 (普通专业标准工科)</td>
+                            <td class="py-3.5 px-5 text-xs text-slate-500">发改收费[2024]128号统一核定</td>
+                            <td class="py-3.5 px-5 text-right font-mono">6,500.00</td>
+                            <td class="py-3.5 px-5 text-right font-mono text-emerald-600">-0.00</td>
+                            <td class="py-3.5 px-5 text-right font-semibold font-mono text-slate-900">6,500.00</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50/50 transition-colors">
+                            <td class="py-3.5 px-5 font-mono text-xs text-slate-500">SF-ZS-02</td>
+                            <td class="py-3.5 px-5 font-medium text-slate-900">学生宿舍住宿费</td>
+                            <td class="py-3.5 px-5 text-xs text-slate-500">南区标准化学生公寓4人间</td>
+                            <td class="py-3.5 px-5 text-right font-mono">1,200.00</td>
+                            <td class="py-3.5 px-5 text-right font-mono text-emerald-600">-0.00</td>
+                            <td class="py-3.5 px-5 text-right font-semibold font-mono text-slate-900">1,200.00</td>
+                        </tr>
+                    
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- 底部结算统计条 -->
+            <div class="bg-slate-50 px-5 py-4 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div class="text-xs text-slate-500">
+                    <span>* 提示：本次缴费支持微信支付、支付宝；支付成功后可直接下载电子财政发票。</span>
+                </div>
+                <div class="flex items-center space-x-6">
+                    <div class="text-right">
+                        <span class="text-xs text-slate-500 mr-2">合计应缴总额:</span>
+                        <span class="text-2xl font-bold font-mono text-red-600">￥7600.00</span>
+                    </div>
+                    <button id="openPaymentBtn" class="bg-[#1b4b8a] hover:bg-[#153b6d] text-white font-medium px-6 py-2.5 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 flex items-center space-x-2 focus:ring-4 focus:ring-blue-200 active:scale-95">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                        </svg>
+                        <span>立即缴纳学费</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 历史缴费记录或常见说明 -->
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5">
+            <h3 class="text-sm font-bold text-slate-700 mb-2">学费缴纳须知及常见问题</h3>
+            <ul class="text-xs text-slate-500 space-y-1.5 list-disc list-inside">
+                <li>若已办理生源地国家助学贷款，且到账金额覆盖学费者，请勿重复自费扫码，系统将自动核销并于开学后更新状态。</li>
+                <li>在线支付支持单笔支付上限，如遇银行卡单笔限额，请至合作银行柜台或使用网上银行转账专属缴费账号。</li>
+                <li>若支付后页面状态未即时变更，因银校互联网络存在短暂延时，建议10分钟后再查询，请勿多次重复支付。</li>
+            </ul>
+        </div>
+    </main>
+
+    <!-- 支付收银台模态框 (Payment Modal) -->
+    <div id="paymentModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm hidden transition-opacity duration-300">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full overflow-hidden transform transition-all duration-300 scale-95 border border-slate-200" id="modalCard">
+            <!-- 收银台头部 -->
+            <div class="bg-gradient-to-r from-[#1b4b8a] to-[#2563eb] text-white px-6 py-4 flex items-center justify-between">
+                <div class="flex items-center space-x-2">
+                    <svg class="w-5 h-5 text-amber-300" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z"></path>
+                        <path fill-rule="evenodd" d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z" clip-rule="evenodd"></path>
+                    </svg>
+                    <span class="font-bold text-base tracking-wide">高校统一财务收银台</span>
+                </div>
+                <button id="closeModalBtn" class="text-blue-100 hover:text-white rounded-lg p-1 transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- 收银台内容主体 -->
+            <div class="p-6">
+                <!-- 金额与订单信息 -->
+                <div class="text-center pb-4 border-b border-slate-100">
+                    <p class="text-xs text-slate-500">2026-2027学年总缴单</p>
+                    <div class="mt-1 flex items-baseline justify-center text-red-600">
+                        <span class="text-sm font-semibold">￥</span>
+                        <span class="text-3xl font-extrabold font-mono tracking-tight">7,600.00</span>
+                    </div>
+                    <div class="mt-2 text-xs text-slate-400 font-mono">
+                        订单编号：20261009182377281024
+                    </div>
+                </div>
+
+                <!-- 支付方式切换 -->
+                <div class="mt-4">
+                    <div class="flex rounded-lg bg-slate-100 p-1 text-xs font-medium text-slate-600">
+                        <button class="flex-1 py-1.5 rounded-md bg-white text-slate-900 shadow-sm flex items-center justify-center space-x-1 border border-slate-200" id="tabWechat">
+                            <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                            <span>微信支付</span>
+                        </button>
+                        <button class="flex-1 py-1.5 rounded-md text-slate-500 hover:text-slate-800 flex items-center justify-center space-x-1" id="tabAlipay">
+                            <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+                            <span>支付宝</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 二维码显示区 -->
+                <div class="mt-5 flex flex-col items-center justify-center">
+                    <div class="relative p-3 bg-white border-2 border-slate-200 rounded-xl shadow-inner flex items-center justify-center w-56 h-56 group">
+                        
+                        <!-- 真实渲染的二维码容器 -->
+                        <div id="qrcodeBox" class="w-48 h-48 flex items-center justify-center"></div>
+
+                        <!-- 动态失效遮罩层 (默认显示，以强化失效效果) -->
+                        <div id="expiredOverlay" class="absolute inset-0 bg-white/95 backdrop-blur-[2px] rounded-xl flex flex-col items-center justify-center p-4 text-center">
+                            <div class="w-12 h-12 bg-red-100 text-red-600 rounded-full flex items-center justify-center mb-2 shadow-sm">
+                                <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                                </svg>
+                            </div>
+                            <span class="text-sm font-bold text-red-600">该二维码已失效</span>
+                            <span class="text-xs text-slate-500 mt-1">安全防刷保护机制已触发</span>
+                            <button id="refreshQrBtn" class="mt-3 px-3 py-1 bg-slate-800 text-white rounded text-xs hover:bg-slate-700 transition flex items-center space-x-1">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                                </svg>
+                                <span>重新获取二维码</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 提示文字 -->
+                    <div class="mt-3 text-center">
+                        <p class="text-xs text-slate-600 flex items-center justify-center space-x-1">
+                            <svg class="w-4 h-4 text-emerald-600" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span id="scanMethodText">请使用微信或手机扫一扫完成支付</span>
+                        </p>
+                        <p class="text-[11px] text-slate-400 mt-0.5">扫码后将直接响应安全结算校验结果</p>
+                    </div>
+
+                    <!-- 模拟扫码结果预览辅助按钮 -->
+                    <div class="mt-4 pt-3 border-t border-slate-100 w-full flex justify-center">
+                        <button id="previewScanResultBtn" class="text-xs text-blue-600 hover:text-blue-800 flex items-center space-x-1 font-medium bg-blue-50 px-3 py-1.5 rounded-md hover:bg-blue-100 transition-colors">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                            </svg>
+                            <span></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 收银台底部状态栏 -->
+            <div class="bg-slate-50 px-6 py-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+                <div class="flex items-center space-x-1">
+                    <span class="inline-block w-2 h-2 rounded-full bg-amber-500"></span>
+                    <span>付款倒计时: <span class="font-mono font-bold text-red-500" id="countdownTimer">00:00</span></span>
+                </div>
+                <button id="cancelPayBtn" class="text-slate-500 hover:text-slate-800 underline">返回重选</button>
+            </div>
+        </div>
+    </main>
+
+    <!-- 模拟手机扫码后弹出的界面 (Preview Phone Scan Modal) -->
+    <div id="phoneMockupModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm hidden">
+        <div class="bg-white rounded-3xl max-w-xs w-full shadow-2xl overflow-hidden border-4 border-slate-800">
+            <!-- 手机顶部听筒模拟 -->
+            <div class="bg-slate-900 pt-3 pb-2 flex justify-center">
+                <div class="w-16 h-3.5 bg-slate-800 rounded-full flex items-center justify-center">
+                    <div class="w-2 h-2 bg-slate-700 rounded-full"></div>
+                </div>
+            </div>
+
+            <!-- 手机内页标题栏 -->
+            <div class="bg-slate-100 px-4 py-2.5 border-b border-slate-200 flex items-center justify-between text-xs text-slate-700">
+                <span class="font-medium">扫一扫安全提示</span>
+                <button id="closePhoneModalBtn" class="text-slate-500 hover:text-slate-800 font-bold text-base">&times;</button>
+            </div>
+
+            <!-- 手机内页内容：扫码后的实际显示 -->
+            <div class="p-6 text-center bg-slate-50">
+                <div class="w-16 h-16 bg-red-100 text-red-500 rounded-full flex items-center justify-center mx-auto mb-3 shadow-inner">
+                    <svg class="w-9 h-9" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+                <h3 class="text-base font-bold text-slate-900">该二维码已失效</h3>
+                <p class="text-xs text-slate-500 mt-2 leading-relaxed">
+                    本次高校收费交易凭证二维码已过期或已作废。如需完成学费缴纳，请返回学校教务系统网页端重新获取。
+                </p>
+
+                <div class="mt-5 p-3 bg-white rounded-lg border border-slate-200 text-left text-[11px] text-slate-500 space-y-1">
+                    <div><b>失效原因：</b> 会话鉴权凭据过期或已取消</div>
+                    <div><b>核验系统：</b> 统一校园财务网关</div>
+                    <div><b>处理建议：</b> 关闭当前页面并重新发起结算</div>
+                </div>
+
+                <button id="closePhoneModalBtn2" class="mt-6 w-full py-2 bg-slate-800 hover:bg-slate-900 text-white text-xs font-medium rounded-lg shadow">
+                    确认并关闭
+                </button>
+            </div>
+        </div>
+    </div>
+
+    
+
+    <script>
+        // DOM Elements
+        const openPaymentBtn = document.getElementById('openPaymentBtn');
+        const paymentModal = document.getElementById('paymentModal');
+        const modalCard = document.getElementById('modalCard');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const cancelPayBtn = document.getElementById('cancelPayBtn');
+        const qrcodeBox = document.getElementById('qrcodeBox');
+        const expiredOverlay = document.getElementById('expiredOverlay');
+        const refreshQrBtn = document.getElementById('refreshQrBtn');
+        const countdownTimer = document.getElementById('countdownTimer');
+        const tabWechat = document.getElementById('tabWechat');
+        const tabAlipay = document.getElementById('tabAlipay');
+        const scanMethodText = document.getElementById('scanMethodText');
+
+        const phoneMockupModal = document.getElementById('phoneMockupModal');
+        const previewScanResultBtn = document.getElementById('previewScanResultBtn');
+        const closePhoneModalBtn = document.getElementById('closePhoneModalBtn');
+        const closePhoneModalBtn2 = document.getElementById('closePhoneModalBtn2');
+
+        let qrcodeInstance = null;
+        let countdownInterval = null;
+
+        // 生成二维码内容：当用户用手机扫码时直接呈现“该二维码已失效”
+        function generateQRCode() {
+            qrcodeBox.innerHTML = '';
+            // 直接将文本写入二维码。任何扫码工具（微信、支付宝或系统相机）扫出的字符串直接为“该二维码已失效”
+            qrcodeInstance = new QRCode(qrcodeBox, {
+                text: "该二维码已失效",
+                width: 180,
+                height: 180,
+                colorDark: "#1e293b",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.H
+            });
+        }
+
+        // 打开收银台
+        function showPaymentModal() {
+            paymentModal.classList.remove('hidden');
+            setTimeout(() => {
+                modalCard.classList.remove('scale-95');
+                modalCard.classList.add('scale-100');
+            }, 10);
+
+            // 生成二维码并默认显示已失效遮罩状态
+            generateQRCode();
+            expiredOverlay.classList.remove('hidden');
+            countdownTimer.innerText = "00:00";
+        }
+
+        // 关闭收银台
+        function hidePaymentModal() {
+            modalCard.classList.remove('scale-100');
+            modalCard.classList.add('scale-95');
+            setTimeout(() => {
+                paymentModal.classList.add('hidden');
+            }, 150);
+            if (countdownInterval) clearInterval(countdownInterval);
+        }
+
+        // 刷新重试机制：演示倒计时与重新失效流程
+        function simulateRefreshQR() {
+            expiredOverlay.classList.add('hidden');
+            generateQRCode();
+
+            let timeLeft = 3; // 演示3秒后再次失效，给用户真实体验
+            countdownTimer.innerText = "00:03";
+
+            if (countdownInterval) clearInterval(countdownInterval);
+            countdownInterval = setInterval(() => {
+                timeLeft--;
+                countdownTimer.innerText = `00:0${timeLeft}`;
+                if (timeLeft <= 0) {
+                    clearInterval(countdownInterval);
+                    expiredOverlay.classList.remove('hidden');
+                }
+            }, 1000);
+        }
+
+        // 事件监听绑定
+        openPaymentBtn.addEventListener('click', showPaymentModal);
+        closeModalBtn.addEventListener('click', hidePaymentModal);
+        cancelPayBtn.addEventListener('click', hidePaymentModal);
+        refreshQrBtn.addEventListener('click', simulateRefreshQR);
+
+        // 点击遮罩外部关闭
+        paymentModal.addEventListener('click', (e) => {
+            if (e.target === paymentModal) hidePaymentModal();
+        });
+
+        // 支付方式 Tab 切换
+        tabWechat.addEventListener('click', () => {
+            tabWechat.className = "flex-1 py-1.5 rounded-md bg-white text-slate-900 shadow-sm flex items-center justify-center space-x-1 border border-slate-200";
+            tabAlipay.className = "flex-1 py-1.5 rounded-md text-slate-500 hover:text-slate-800 flex items-center justify-center space-x-1";
+            scanMethodText.innerText = "请使用微信扫一扫完成支付";
+            generateQRCode();
+            expiredOverlay.classList.remove('hidden');
+        });
+
+        tabAlipay.addEventListener('click', () => {
+            tabAlipay.className = "flex-1 py-1.5 rounded-md bg-white text-slate-900 shadow-sm flex items-center justify-center space-x-1 border border-slate-200";
+            tabWechat.className = "flex-1 py-1.5 rounded-md text-slate-500 hover:text-slate-800 flex items-center justify-center space-x-1";
+            scanMethodText.innerText = "请使用支付宝扫一扫完成支付";
+            generateQRCode();
+            expiredOverlay.classList.remove('hidden');
+        });
+
+        // 模拟手机扫码界面弹窗控制
+        previewScanResultBtn.addEventListener('click', () => {
+            phoneMockupModal.classList.remove('hidden');
+        });
+        closePhoneModalBtn.addEventListener('click', () => {
+            phoneMockupModal.classList.add('hidden');
+        });
+        closePhoneModalBtn2.addEventListener('click', () => {
+            phoneMockupModal.classList.add('hidden');
+        });
+        phoneMockupModal.addEventListener('click', (e) => {
+            if (e.target === phoneMockupModal) phoneMockupModal.classList.add('hidden');
+        });
+    </script>
+</body>
+</html>
